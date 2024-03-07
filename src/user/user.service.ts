@@ -18,7 +18,7 @@ export class UserService {
       updatedAt: Date.now(),
     };
     usersDb.create(user);
-    return 'This action adds a new user';
+    return user;
   }
 
   findAll(): User[] {
