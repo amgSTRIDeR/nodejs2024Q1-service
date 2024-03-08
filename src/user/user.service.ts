@@ -61,7 +61,17 @@ export class UserService {
     }
   }
 
-  // remove(id: number) {
-  //   return `This action removes a #${id} user`;
-  // }
+  remove(id: string) {
+    if (!isUuid(id)) {
+      return { status: 400, message: 'Invalid UUID' };
+    }
+
+    const userIsDeleted = usersDb.deleteUser(id);
+
+    if (userIsDeleted) {
+      return { status: 204, message: 'User is found and deleted' };
+    } else {
+      return { status: 404, message: `User with id: ${id} not found` };
+    }
+  }
 }

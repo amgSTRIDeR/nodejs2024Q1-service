@@ -53,8 +53,9 @@ export class UserController {
     }
   }
 
-  // @Delete(':id')
-  // remove(@Param('id') id: string) {
-  //   return this.userService.remove(+id);
-  // }
+  @Delete(':id')
+  remove(@Param('id') id: string, @Res() response: Response) {
+    const { status, message } = this.userService.remove(id);
+    return response.status(status).json(message);
+  }
 }

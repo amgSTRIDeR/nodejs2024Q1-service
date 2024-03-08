@@ -55,4 +55,14 @@ export default class UsersDb {
 
     return updatedUser;
   }
+
+  public deleteUser(id: string) {
+    const user = this.getById(id);
+    if (!user) {
+      return false;
+    }
+
+    this.users = this.users.filter((user) => user.id !== id);
+    return true;
+  }
 }
