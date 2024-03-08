@@ -1,11 +1,4 @@
-interface User {
-  id: string;
-  login: string;
-  password: string;
-  version: number;
-  createdAt: number;
-  updatedAt: number;
-}
+import { User } from 'src/user/entities/user.entity';
 
 export default class UsersDb {
   private static instance: UsersDb;
