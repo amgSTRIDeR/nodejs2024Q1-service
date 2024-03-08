@@ -24,4 +24,8 @@ export default class UsersDb {
   public getAll() {
     return this.users;
   }
+
+  public getById(id: string) {
+    return this.users.find((user) => user.id === id);
+  }
 }
