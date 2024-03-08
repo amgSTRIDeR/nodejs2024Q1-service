@@ -27,7 +27,12 @@ export class UserController {
   @Get(':id')
   findOne(@Param('id') id: string, @Res() response: Response) {
     const { status, message } = this.userService.findOne(id);
-    return response.status(status).json(message);
+    if (message instanceof Object) {
+      const { password, ...userWithoutPassword } = message;
+      return response.status(status).json(userWithoutPassword);
+    } else {
+      return response.status(status).json(message);
+    }
   }
 
   @Post()
