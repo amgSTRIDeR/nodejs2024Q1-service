@@ -24,6 +24,9 @@ export class UserResponseInterceptor implements NestInterceptor {
   }
 
   private removePassword(user: any): any {
+    if (!user) {
+      return user;
+    }
     const { password, ...userWithoutPassword } = user;
     return userWithoutPassword;
   }

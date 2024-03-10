@@ -1,11 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
-// import { UpdateUserDto } from './dto/update-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 import UsersDb from 'src/db/usersDb';
 import { v4 as uuidv4 } from 'uuid';
 import { User } from './entities/user.entity';
 import { isUuid } from 'src/common/isUuid';
-import { UpdateUserDto } from './dto/update-user.dto';
 
 const usersDb = UsersDb.getInstance();
 
