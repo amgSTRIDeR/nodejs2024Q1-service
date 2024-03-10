@@ -15,10 +15,10 @@ import { UpdateTrackDto } from './dto/update-track.dto';
 export class TrackController {
   constructor(private readonly trackService: TrackService) {}
 
-  // @Get()
-  // findAll() {
-  //   return this.userService.findAll();
-  // }
+  @Get()
+  findAll() {
+    return this.trackService.findAll();
+  }
 
   // @Get(':id')
   // findOne(@Param('id') id: string, @Res() response: Response) {

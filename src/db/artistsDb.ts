@@ -1,4 +1,7 @@
 import { Artist } from 'src/artist/entities/artist.entity';
+import AlbumsDb from './albumsDb';
+
+const albumsDb = AlbumsDb.getInstance();
 
 export default class ArtistsDb {
   private static instance: ArtistsDb;
@@ -47,6 +50,8 @@ export default class ArtistsDb {
     }
 
     this.artists = this.artists.filter((artist) => artist.id !== id);
+
+    albumsDb.removeArtist(id);
     return true;
   }
 }

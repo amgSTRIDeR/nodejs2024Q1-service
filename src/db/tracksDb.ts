@@ -1,61 +1,52 @@
 import { Track } from 'src/track/entities/track.entity';
 
-export default class TrackDb {
-  private static instance: TrackDb;
+export default class TracksDb {
+  private static instance: TracksDb;
   private tracks: Track[] = [];
-  public static getInstance(): TrackDb {
-    if (!TrackDb.instance) {
-      TrackDb.instance = new TrackDb();
+  public static getInstance(): TracksDb {
+    if (!TracksDb.instance) {
+      TracksDb.instance = new TracksDb();
     }
-    return TrackDb.instance;
+    return TracksDb.instance;
   }
 
-  //   public create(user: User) {
-  //     this.users.push(user);
+  public create(track: Track) {
+    this.tracks.push(track);
+  }
+
+  public getAll() {
+    return this.tracks;
+  }
+
+  // public getById(id: string) {
+  //   return this.artists.find((artist) => artist.id === id);
+  // }
+
+  // public updateArtist(id: string, info: Artist) {
+  //   const artist = this.getById(id);
+  //   if (!artist) {
+  //     return null;
   //   }
 
-  //   public getAll() {
-  //     return this.users;
+  //   const updatedArtist = {
+  //     id,
+  //     ...info,
+  //   };
+
+  //   this.artists = this.artists.map((artist) =>
+  //     artist.id === id ? updatedArtist : artist,
+  //   );
+
+  //   return updatedArtist;
+  // }
+
+  // public deleteArtist(id: string) {
+  //   const artist = this.getById(id);
+  //   if (!artist) {
+  //     return false;
   //   }
 
-  //   public getById(id: string) {
-  //     return this.users.find((user) => user.id === id);
-  //   }
-
-  //   public updateUser(
-  //     id: string,
-  //     params: { oldPassword: string; newPassword: string },
-  //   ) {
-  //     const user = this.getById(id);
-  //     if (!user) {
-  //       return null;
-  //     }
-
-  //     if (params.oldPassword && user.password !== params.oldPassword) {
-  //       return null;
-  //     }
-
-  //     const updatedUser = {
-  //       ...user,
-  //       password: params.newPassword,
-  //       updatedAt: Date.now(),
-  //       version: user.version + 1,
-  //     };
-
-  //     this.users = this.users.map((user) =>
-  //       user.id === id ? updatedUser : user,
-  //     );
-
-  //     return updatedUser;
-  //   }
-
-  //   public deleteUser(id: string) {
-  //     const user = this.getById(id);
-  //     if (!user) {
-  //       return false;
-  //     }
-
-  //     this.users = this.users.filter((user) => user.id !== id);
-  //     return true;
-  //   }
+  //   this.artists = this.artists.filter((artist) => artist.id !== id);
+  //   return true;
+  // }
 }
