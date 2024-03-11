@@ -5,8 +5,10 @@ import AlbumsDb from 'src/db/albumsDb';
 import { Album } from './entities/album.entity';
 import { isUuid } from 'src/common/isUuid';
 import { v4 as uuidv4 } from 'uuid';
+import TracksDb from 'src/db/tracksDb';
 
 const albumsDb = AlbumsDb.getInstance();
+const tracksDb = TracksDb.getInstance();
 
 @Injectable()
 export class AlbumService {
@@ -60,6 +62,7 @@ export class AlbumService {
     }
 
     const albumIsDeleted = albumsDb.deleteAlbum(id);
+    tracksDb.removeAlbum(id);
 
     if (albumIsDeleted) {
       return { status: 204, message: 'Album is found and deleted' };

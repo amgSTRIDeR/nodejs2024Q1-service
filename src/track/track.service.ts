@@ -2,28 +2,69 @@ import { Injectable } from '@nestjs/common';
 import { CreateTrackDto } from './dto/create-track.dto';
 import { UpdateTrackDto } from './dto/update-track.dto';
 import TracksDb from 'src/db/tracksDb';
+import { v4 as uuidv4 } from 'uuid';
+import { Track } from './entities/track.entity';
+import { isUuid } from 'src/common/isUuid';
 
 const tracksDb = TracksDb.getInstance();
 
 @Injectable()
 export class TrackService {
   create(createTrackDto: CreateTrackDto) {
-    return 'This action adds a new track';
+    const track = {
+      ...createTrackDto,
+      id: uuidv4(),
+    };
+    tracksDb.create(track);
+    return track;
   }
 
-  findAll() {
-    return tracksDb.getAll();
+  findAll(): Track[] {
+    const allTracks = tracksDb.getAll();
+    return allTracks;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} track`;
+  findOne(id: string): { status: number; message: string | Track } {
+    if (!isUuid(id)) {
+      return { status: 400, message: 'Invalid UUID' };
+    }
+
+    const track = tracksDb.getById(id);
+
+    if (track) {
+      return { status: 200, message: track };
+    } else {
+      return { status: 404, message: `Track with id: ${id} not found` };
+    }
   }
 
-  update(id: number, updateTrackDto: UpdateTrackDto) {
-    return `This action updates a #${id} track`;
+  update(id: string, updateTrackDto: UpdateTrackDto) {
+    if (!isUuid(id)) {
+      return { status: 400, message: 'Invalid UUID' };
+    }
+
+    const track = tracksDb.getById(id);
+
+    if (!track) {
+      return { status: 404, message: `Track with id: ${id} not found` };
+    }
+
+    const updatedTrack = tracksDb.updateTrack(id, updateTrackDto);
+
+    return { status: 200, message: updatedTrack };
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} track`;
+  remove(id: string) {
+    if (!isUuid(id)) {
+      return { status: 400, message: 'Invalid UUID' };
+    }
+
+    const trackIsDeleted = tracksDb.deleteTrack(id);
+
+    if (trackIsDeleted) {
+      return { status: 204, message: 'Track is found and deleted' };
+    } else {
+      return { status: 404, message: `Track with id: ${id} not found` };
+    }
   }
 }

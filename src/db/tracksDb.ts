@@ -18,35 +18,62 @@ export default class TracksDb {
     return this.tracks;
   }
 
-  // public getById(id: string) {
-  //   return this.artists.find((artist) => artist.id === id);
-  // }
+  public getById(id: string) {
+    return this.tracks.find((track) => track.id === id);
+  }
 
-  // public updateArtist(id: string, info: Artist) {
-  //   const artist = this.getById(id);
-  //   if (!artist) {
-  //     return null;
-  //   }
+  public updateTrack(id: string, info: Track) {
+    const track = this.getById(id);
+    if (!track) {
+      return null;
+    }
 
-  //   const updatedArtist = {
-  //     id,
-  //     ...info,
-  //   };
+    const updatedTrack = {
+      id,
+      name: info.name !== undefined ? info.name : track.name,
+      artistId: info.artistId !== undefined ? info.artistId : track.artistId,
+      albumId: info.albumId !== undefined ? info.albumId : track.albumId,
+      duration: info.duration !== undefined ? info.duration : track.duration,
+    };
 
-  //   this.artists = this.artists.map((artist) =>
-  //     artist.id === id ? updatedArtist : artist,
-  //   );
+    this.tracks = this.tracks.map((track) =>
+      track.id === id ? updatedTrack : track,
+    );
 
-  //   return updatedArtist;
-  // }
+    return updatedTrack;
+  }
 
-  // public deleteArtist(id: string) {
-  //   const artist = this.getById(id);
-  //   if (!artist) {
-  //     return false;
-  //   }
+  public deleteTrack(id: string) {
+    const track = this.getById(id);
+    if (!track) {
+      return false;
+    }
 
-  //   this.artists = this.artists.filter((artist) => artist.id !== id);
-  //   return true;
-  // }
+    this.tracks = this.tracks.filter((track) => track.id !== id);
+    return true;
+  }
+
+  public removeArtist = (artistId: string) => {
+    this.tracks = this.tracks.map((track) => {
+      if (track.artistId === artistId) {
+        return {
+          ...track,
+          artistId: null,
+        };
+      }
+      return track;
+    });
+  };
+
+  public removeAlbum = (albumId: string) => {
+    this.tracks = this.tracks.map((track) => {
+      if (track.albumId === albumId) {
+        return {
+          ...track,
+          albumId: null,
+        };
+      }
+      return track;
+    });
+  };
 }
