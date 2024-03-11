@@ -5,8 +5,10 @@ import TracksDb from 'src/db/tracksDb';
 import { v4 as uuidv4 } from 'uuid';
 import { Track } from './entities/track.entity';
 import { isUuid } from 'src/common/isUuid';
+import FavsDb from 'src/db/favsDb';
 
 const tracksDb = TracksDb.getInstance();
+const favsDb = FavsDb.getInstance();
 
 @Injectable()
 export class TrackService {
@@ -60,6 +62,7 @@ export class TrackService {
     }
 
     const trackIsDeleted = tracksDb.deleteTrack(id);
+    favsDb.removeTrack(id);
 
     if (trackIsDeleted) {
       return { status: 204, message: 'Track is found and deleted' };

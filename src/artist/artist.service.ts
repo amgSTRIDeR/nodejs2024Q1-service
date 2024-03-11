@@ -6,9 +6,13 @@ import { v4 as uuidv4 } from 'uuid';
 import { Artist } from './entities/artist.entity';
 import { isUuid } from 'src/common/isUuid';
 import TracksDb from 'src/db/tracksDb';
+import FavsDb from 'src/db/favsDb';
+import AlbumsDb from 'src/db/albumsDb';
 
+const albumsDb = AlbumsDb.getInstance();
 const artistsDb = ArtistsDb.getInstance();
 const tracksDb = TracksDb.getInstance();
+const favsDb = FavsDb.getInstance();
 
 @Injectable()
 export class ArtistService {
@@ -63,6 +67,8 @@ export class ArtistService {
 
     const artistIsDeleted = artistsDb.deleteArtist(id);
     tracksDb.removeArtist(id);
+    favsDb.removeArtist(id);
+    albumsDb.removeArtist(id);
 
     if (artistIsDeleted) {
       return { status: 204, message: 'Artist is found and deleted' };
