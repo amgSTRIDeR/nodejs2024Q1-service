@@ -24,4 +24,4 @@ COPY --from=build /app/package.json .
 COPY --from=prod_dependencies /tmp/prod_dependencies/node_modules node_modules
 COPY --from=build /app/dist dist
 EXPOSE 4000/tcp
-CMD ["dist/src/main.js"]
+CMD ["dist/main.js"]
