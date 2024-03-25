@@ -11,6 +11,7 @@ services:
     environment:
       - PORT=${PORT}
     volumes:
-      - .:/usr/src/app/src
+      - ./src:/usr/src/app/src
       - ./logs:/usr/src/app/logs
+      - ./db:/usr/src/app/db
     restart: unless-stopped
