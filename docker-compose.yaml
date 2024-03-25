@@ -1,13 +1,16 @@
 version: '3'
 
 services:
-  home_library-service:
+  home_library_service:
     build:
       context: .
       dockerfile: Dockerfile
     container_name: home_library_service
     ports:
-      - "4000:4000"
+      - "${PORT}:${PORT}"
+    environment:
+      - PORT=${PORT}
     volumes:
-      - .:/usr/src/app
-    restart: always
+      - .:/usr/src/app/src
+      - ./logs:/usr/src/app/logs
+    restart: unless-stopped
