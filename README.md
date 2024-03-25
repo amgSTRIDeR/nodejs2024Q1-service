@@ -4,6 +4,7 @@
 
 - Git - [Download & Install Git](https://git-scm.com/downloads).
 - Node.js - [Download & Install Node.js](https://nodejs.org/en/download/) and the npm package manager.
+- Docker Desktop installed on your machine [Docker Desktop](https://www.docker.com/products/docker-desktop/)
 
 ## Downloading
 
@@ -11,17 +12,22 @@
 git clone git@github.com:amgSTRIDeR/nodejs2024Q1-service.git
 ```
 
-## Installing NPM modules
+## Navigate to the project directory
+
+```
+cd nodejs2024Q1-service
+```
+
+## Install dependencies
 
 ```
 npm install
 ```
 
-## Add .env file
+## Create a .env file based on the provided .env.example
 
 ```
-create .env file in root directory or rename .env.example
-it should be PORT=4000 in .env file
+cp .env.example .env
 ```
 
 ## Running application
@@ -33,6 +39,13 @@ npm start
 After starting the app on port (PORT from .env file) you can open
 in your browser OpenAPI documentation by typing http://localhost:4000/api/.
 For more information about OpenAPI/Swagger please visit https://swagger.io/.
+
+### Running the Application with Docker
+
+```
+npm run start:docker
+```
+
 
 ## Testing
 
@@ -53,3 +66,4 @@ npm run lint
 ```
 npm run format
 ```
+
