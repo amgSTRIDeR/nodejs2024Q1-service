@@ -11,4 +11,8 @@ export class LoggingService {
   log(message: object) {
     this.logger.log(JSON.stringify(message));
   }
+
+  error(message: string) {
+    this.logger.error(message);
+  }
 }
