@@ -12,6 +12,7 @@ import { FavsModule } from './favs/favs.module';
 import { LoggingService } from './loggingService/logging.service';
 import { LoggerMiddleware } from './utils/logger.midleware';
 import { CustomExceptionFilter } from './utils/custom-exception.filter';
+import { ErrorHandlingService } from './errorHandling/error-handling.service';
 
 @Module({
   imports: [
@@ -36,6 +37,7 @@ import { CustomExceptionFilter } from './utils/custom-exception.filter';
       useClass: CustomExceptionFilter,
     },
     LoggingService,
+    ErrorHandlingService,
   ],
 })
 export class AppModule implements NestModule {

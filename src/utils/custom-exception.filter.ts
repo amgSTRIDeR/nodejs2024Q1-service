@@ -8,17 +8,14 @@ import {
 import { Response } from 'express';
 import { LoggingService } from 'src/loggingService/logging.service';
 
-@Catch(HttpException)
+@Catch()
 export class CustomExceptionFilter implements ExceptionFilter {
   constructor(private logger: LoggingService) {}
 
-  catch(exception: HttpException, host: ArgumentsHost) {
+  catch(exception: any, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
-    const status =
-      exception instanceof HttpException
-        ? exception.getStatus()
-        : HttpStatus.INTERNAL_SERVER_ERROR;
+    const status = exception.getStatus();
 
     response.status(status).json({
       statusCode: status,

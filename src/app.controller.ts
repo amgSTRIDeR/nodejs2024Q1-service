@@ -7,6 +7,10 @@ export class AppController {
 
   @Get()
   getHello(): string {
+    // setTimeout(() => {
+    //   throw new Error('Error from controller');
+
+    // }, 100)
     return this.appService.getHello();
   }
 }
