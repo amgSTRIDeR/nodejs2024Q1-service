@@ -6,7 +6,11 @@ import * as path from 'path';
 export class LoggingService {
   logger: Logger;
   logsDir = path.resolve(__dirname, '../../logs');
-  currentLogFilePath = path.resolve(this.logsDir, new Date().toDateString());
+  logFileNumber = 0;
+  currentLogFilePath = path.resolve(
+    this.logsDir,
+    `${this.logFileNumber} - ${new Date().toDateString()}`,
+  );
 
   constructor() {
     this.logger = new Logger();
@@ -25,8 +29,28 @@ export class LoggingService {
   }
 
   async writeToFile(message: string) {
-    const currentDate = new Date().toDateString();
+    const currentDate = new Date().toString();
     const logMessage = `${currentDate}: ${message}\n`;
+    const maxLogFileSize = process.env.MAX_LOG_FILE_SIZE;
+    const fileSize = await this.getFileSize();
+
+    console.log(fileSize);
+    if (fileSize >= +maxLogFileSize) {
+      this.logFileNumber++;
+      this.currentLogFilePath = path.resolve(
+        this.logsDir,
+        `${this.logFileNumber} - ${new Date().toDateString()}`,
+      );
+    }
     await fs.writeFile(this.currentLogFilePath, logMessage, { flag: 'a' });
+  }
+
+  async getFileSize() {
+    try {
+      const stats = await fs.stat(this.currentLogFilePath);
+      return stats.size;
+    } catch {
+      return 0;
+    }
   }
 }
