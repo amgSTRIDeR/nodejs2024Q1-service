@@ -7,10 +7,13 @@ export class LoggerMiddleware implements NestMiddleware {
   constructor(private logger: LoggingService) {}
 
   use(req: Request, res: Response, next: () => void) {
-    const { ip, method, originalUrl } = req;
+    const { url, originalUrl, query, body, method } = req;
+    const { statusCode } = res;
+
     res.on('finish', () => {
-      this.logger.log(`${method}`);
+      this.logger.log({ url, originalUrl, query, body, method, statusCode });
     });
+
     next();
   }
 }

@@ -8,7 +8,7 @@ export class LoggingService {
     this.logger = new Logger();
   }
 
-  log(message: string) {
-    this.logger.log(message);
+  log(message: object) {
+    this.logger.log(JSON.stringify(message));
   }
 }
