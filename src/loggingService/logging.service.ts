@@ -7,9 +7,14 @@ export class LoggingService {
   logger: Logger;
   logsDir = path.resolve(__dirname, '../../logs');
   logFileNumber = 0;
+  errorFileNumber = 0;
   currentLogFilePath = path.resolve(
     this.logsDir,
-    `${this.logFileNumber} - ${new Date().toDateString()}`,
+    `Log ${this.logFileNumber} - ${new Date().toDateString()}`,
+  );
+  currentErrorLogFilePath = path.resolve(
+    this.logsDir,
+    `Error ${this.logFileNumber} - ${new Date().toDateString()}`,
   );
 
   constructor() {
@@ -20,34 +25,47 @@ export class LoggingService {
 
   log(message: object) {
     this.logger.log(JSON.stringify(message));
-    this.writeToFile(JSON.stringify(message));
+    this.writeToFile(JSON.stringify(message), 'log');
   }
 
-  error(message: string) {
+  error(message: object) {
     this.logger.error(message);
-    this.writeToFile(message);
+    this.writeToFile(JSON.stringify(message), 'error');
   }
 
-  async writeToFile(message: string) {
+  async writeToFile(message: string, flag = 'log') {
+    let filePath =
+      flag === 'log' ? this.currentLogFilePath : this.currentErrorLogFilePath;
     const currentDate = new Date().toString();
     const logMessage = `${currentDate}: ${message}\n`;
     const maxLogFileSize = process.env.MAX_LOG_FILE_SIZE;
-    const fileSize = await this.getFileSize();
 
-    console.log(fileSize);
+    const fileSize = await this.getFileSize(filePath);
+
     if (fileSize >= +maxLogFileSize) {
       this.logFileNumber++;
-      this.currentLogFilePath = path.resolve(
-        this.logsDir,
-        `${this.logFileNumber} - ${new Date().toDateString()}`,
-      );
+      if (flag === 'log') {
+        this.currentLogFilePath = path.resolve(
+          this.logsDir,
+          `Log ${this.logFileNumber} - ${new Date().toDateString()}`,
+        );
+        filePath = this.currentLogFilePath;
+      } else {
+        this.errorFileNumber++;
+        this.currentErrorLogFilePath = path.resolve(
+          this.logsDir,
+          `Error ${this.errorFileNumber} - ${new Date().toDateString()}`,
+        );
+        filePath = this.currentErrorLogFilePath;
+      }
     }
-    await fs.writeFile(this.currentLogFilePath, logMessage, { flag: 'a' });
+
+    await fs.writeFile(filePath, logMessage, { flag: 'a' });
   }
 
-  async getFileSize() {
+  async getFileSize(filePath: string) {
     try {
-      const stats = await fs.stat(this.currentLogFilePath);
+      const stats = await fs.stat(filePath);
       return stats.size;
     } catch {
       return 0;

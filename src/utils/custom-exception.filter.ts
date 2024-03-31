@@ -25,6 +25,6 @@ export class CustomExceptionFilter implements ExceptionFilter {
       message: 'Internal server error',
     });
 
-    this.logger.error(exception.message);
+    this.logger.error({ message: exception.message, status: status });
   }
 }

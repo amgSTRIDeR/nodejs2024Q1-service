@@ -5,13 +5,11 @@ import { LoggingService } from 'src/loggingService/logging.service';
 export class ErrorHandlingService {
   constructor(private logger: LoggingService) {
     process.on('uncaughtException', (error) => {
-      this.logger.error(`Uncaught Exception: ${error.stack}`);
+      this.logger.error({ message: error.message, status: 500 });
     });
 
     process.on('unhandledRejection', (reason, promise) => {
-      this.logger.error(
-        `Unhandled Rejection at: ${promise}, reason: ${reason}`,
-      );
+      this.logger.error({ message: reason, status: 500 });
     });
   }
 }
