@@ -10,12 +10,14 @@ export class LoggingService {
   errorFileNumber = 0;
   currentLogFilePath = path.resolve(
     this.logsDir,
-    `Log ${this.logFileNumber} - ${new Date().toDateString()}`,
+    `Log ${this.logFileNumber} - ${new Date().toDateString()}.log`,
   );
   currentErrorLogFilePath = path.resolve(
     this.logsDir,
-    `Error ${this.logFileNumber} - ${new Date().toDateString()}`,
+    `Error ${this.logFileNumber} - ${new Date().toDateString()}.log`,
   );
+  private maxLogFileSize = +process.env.MAX_LOG_FILE_SIZE || 3000;
+  private loggingLevel = +process.env.LOGGING_LEVEL || 3;
 
   constructor() {
     this.logger = new Logger();
@@ -38,11 +40,10 @@ export class LoggingService {
       flag === 'log' ? this.currentLogFilePath : this.currentErrorLogFilePath;
     const currentDate = new Date().toString();
     const logMessage = `${currentDate}: ${message}\n`;
-    const maxLogFileSize = process.env.MAX_LOG_FILE_SIZE;
 
     const fileSize = await this.getFileSize(filePath);
 
-    if (fileSize >= +maxLogFileSize) {
+    if (fileSize >= this.maxLogFileSize) {
       this.logFileNumber++;
       if (flag === 'log') {
         this.currentLogFilePath = path.resolve(
