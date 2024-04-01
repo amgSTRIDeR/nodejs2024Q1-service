@@ -19,4 +19,17 @@ export class AuthController {
     await this.authService.signup(dto);
     response.status(201).json({ message: 'User created' });
   }
+
+  @Post('login')
+  async login(
+    @Body() dto: SignupDto,
+    @Res() response: Response,
+  ): Promise<void> {
+    if (!dto.login || !dto.password) {
+      response.status(400).json({ message: 'Login and password are required' });
+      return;
+    }
+    const { token, refreshToken, status } = await this.authService.login(dto);
+    response.status(status).json({ token: token, refreshToken: refreshToken });
+  }
 }
