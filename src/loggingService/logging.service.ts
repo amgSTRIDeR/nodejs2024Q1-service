@@ -62,14 +62,14 @@ export class LoggingService {
         case 'log':
           this.currentLogFilePath = path.resolve(
             this.logsDir,
-            `Log ${this.logFileNumber} - ${new Date().toDateString()}`,
+            `Log ${this.logFileNumber} - ${new Date().toDateString()}.log`,
           );
           filePath = this.currentLogFilePath;
           break;
         case 'warn':
           this.currentLogFilePath = path.resolve(
             this.logsDir,
-            `Log ${this.logFileNumber} - ${new Date().toDateString()}`,
+            `Log ${this.logFileNumber} - ${new Date().toDateString()}.log`,
           );
           filePath = this.currentLogFilePath;
           break;
@@ -77,13 +77,14 @@ export class LoggingService {
           this.errorFileNumber++;
           this.currentErrorLogFilePath = path.resolve(
             this.logsDir,
-            `Error ${this.errorFileNumber} - ${new Date().toDateString()}`,
+            `Error ${this.errorFileNumber} - ${new Date().toDateString()}.log`,
           );
           filePath = this.currentErrorLogFilePath;
           break;
       }
     }
 
+    await fs.mkdir(this.logsDir, { recursive: true });
     await fs.writeFile(filePath, logMessage, { flag: 'a' });
   }
 
