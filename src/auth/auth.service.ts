@@ -39,6 +39,7 @@ export class AuthService {
     const hash = await bcrypt.hash(dto.password, this.saltLevel);
     const userId = uuidv4();
     this.database.push({ login: dto.login, hash: hash, userId: userId });
+    return { userId: userId };
   }
 
   generateToken(login: string, userId: string) {

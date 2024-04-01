@@ -16,8 +16,8 @@ export class AuthController {
       response.status(400).json({ message: 'Login and password are required' });
       return;
     }
-    await this.authService.signup(dto);
-    response.status(201).json({ message: 'User created' });
+    const { userId } = await this.authService.signup(dto);
+    response.status(201).json({ id: userId });
   }
 
   @Post('login')
@@ -30,6 +30,8 @@ export class AuthController {
       return;
     }
     const { token, refreshToken, status } = await this.authService.login(dto);
-    response.status(status).json({ token: token, refreshToken: refreshToken });
+    response
+      .status(status)
+      .json({ accessToken: token, refreshToken: refreshToken });
   }
 }
