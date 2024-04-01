@@ -25,6 +25,10 @@ export class CustomExceptionFilter implements ExceptionFilter {
       message: 'Internal server error',
     });
 
-    this.logger.error({ message: exception.message, status: status });
+    if (status >= HttpStatus.INTERNAL_SERVER_ERROR) {
+      this.logger.error({ message: exception.message, status: status });
+    } else if (status >= HttpStatus.BAD_REQUEST) {
+      this.logger.warn({ message: exception.message, status: status });
+    }
   }
 }

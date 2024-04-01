@@ -26,18 +26,31 @@ export class LoggingService {
   }
 
   log(message: object) {
-    this.logger.log(JSON.stringify(message));
-    this.writeToFile(JSON.stringify(message), 'log');
+    if (this.loggingLevel >= 2) {
+      this.logger.log(JSON.stringify(message));
+      this.writeToFile(JSON.stringify(message), 'log');
+    }
   }
 
   error(message: object) {
-    this.logger.error(message);
-    this.writeToFile(JSON.stringify(message), 'error');
+    if (this.loggingLevel >= 0) {
+      this.logger.error(message);
+      this.writeToFile(JSON.stringify(message), 'error');
+    }
+  }
+
+  warn(message: object) {
+    if (this.loggingLevel >= 2) {
+      this.logger.warn(JSON.stringify(message));
+      this.writeToFile(JSON.stringify(message), 'warn');
+    }
   }
 
   async writeToFile(message: string, flag = 'log') {
     let filePath =
-      flag === 'log' ? this.currentLogFilePath : this.currentErrorLogFilePath;
+      flag === 'log' || 'warn'
+        ? this.currentLogFilePath
+        : this.currentErrorLogFilePath;
     const currentDate = new Date().toString();
     const logMessage = `${currentDate}: ${message}\n`;
 
@@ -45,19 +58,29 @@ export class LoggingService {
 
     if (fileSize >= this.maxLogFileSize) {
       this.logFileNumber++;
-      if (flag === 'log') {
-        this.currentLogFilePath = path.resolve(
-          this.logsDir,
-          `Log ${this.logFileNumber} - ${new Date().toDateString()}`,
-        );
-        filePath = this.currentLogFilePath;
-      } else {
-        this.errorFileNumber++;
-        this.currentErrorLogFilePath = path.resolve(
-          this.logsDir,
-          `Error ${this.errorFileNumber} - ${new Date().toDateString()}`,
-        );
-        filePath = this.currentErrorLogFilePath;
+      switch (flag) {
+        case 'log':
+          this.currentLogFilePath = path.resolve(
+            this.logsDir,
+            `Log ${this.logFileNumber} - ${new Date().toDateString()}`,
+          );
+          filePath = this.currentLogFilePath;
+          break;
+        case 'warn':
+          this.currentLogFilePath = path.resolve(
+            this.logsDir,
+            `Warning ${this.logFileNumber} - ${new Date().toDateString()}`,
+          );
+          filePath = this.currentLogFilePath;
+          break;
+        case 'error':
+          this.errorFileNumber++;
+          this.currentErrorLogFilePath = path.resolve(
+            this.logsDir,
+            `Error ${this.errorFileNumber} - ${new Date().toDateString()}`,
+          );
+          filePath = this.currentErrorLogFilePath;
+          break;
       }
     }
 
