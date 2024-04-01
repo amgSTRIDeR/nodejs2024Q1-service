@@ -28,21 +28,21 @@ export class LoggingService {
   log(message: object) {
     if (this.loggingLevel >= 2) {
       this.logger.log(JSON.stringify(message));
-      this.writeToFile(JSON.stringify(message), 'log');
+      this.writeToFile(JSON.stringify({ type: 'log', ...message }), 'log');
     }
   }
 
   error(message: object) {
     if (this.loggingLevel >= 0) {
       this.logger.error(message);
-      this.writeToFile(JSON.stringify(message), 'error');
+      this.writeToFile(JSON.stringify({ type: 'error', ...message }), 'error');
     }
   }
 
   warn(message: object) {
     if (this.loggingLevel >= 2) {
       this.logger.warn(JSON.stringify(message));
-      this.writeToFile(JSON.stringify(message), 'warn');
+      this.writeToFile(JSON.stringify({ type: 'warning', ...message }), 'warn');
     }
   }
 
@@ -69,7 +69,7 @@ export class LoggingService {
         case 'warn':
           this.currentLogFilePath = path.resolve(
             this.logsDir,
-            `Warning ${this.logFileNumber} - ${new Date().toDateString()}`,
+            `Log ${this.logFileNumber} - ${new Date().toDateString()}`,
           );
           filePath = this.currentLogFilePath;
           break;
