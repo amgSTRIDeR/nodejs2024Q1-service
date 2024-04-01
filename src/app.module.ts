@@ -14,6 +14,7 @@ import { LoggerMiddleware } from './utils/logger.midleware';
 import { CustomExceptionFilter } from './utils/custom-exception.filter';
 import { ErrorHandlingService } from './errorHandling/error-handling.service';
 import { AuthModule } from './auth/auth.module';
+import { AuthMiddleware } from './auth/auth.middleware';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { AuthModule } from './auth/auth.module';
   ],
   controllers: [AppController],
   providers: [
+    AuthMiddleware,
     AppService,
     {
       provide: APP_INTERCEPTOR,
@@ -44,6 +46,7 @@ import { AuthModule } from './auth/auth.module';
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
+    consumer.apply(AuthMiddleware).forRoutes('*');
     consumer.apply(LoggerMiddleware).forRoutes('*');
   }
 }
