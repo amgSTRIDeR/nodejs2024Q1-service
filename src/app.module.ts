@@ -13,6 +13,7 @@ import { LoggingService } from './loggingService/logging.service';
 import { LoggerMiddleware } from './utils/logger.midleware';
 import { CustomExceptionFilter } from './utils/custom-exception.filter';
 import { ErrorHandlingService } from './errorHandling/error-handling.service';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { ErrorHandlingService } from './errorHandling/error-handling.service';
     ArtistModule,
     AlbumModule,
     FavsModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [
